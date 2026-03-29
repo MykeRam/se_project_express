@@ -1,23 +1,45 @@
+/* eslint-disable no-console */
 const User = require("../models/user");
+const {
+  BAD_REQUEST,
+  NOT_FOUND,
+  INTERNAL_SERVER_ERROR,
+} = require("../utils/errors");
 
 const getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send(users))
-    .catch(() => res.status(500).send({ message: "An error has occurred on the server" }));
+    .catch((err) => {
+      console.error(err);
+      console.log(err.name);
+      res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: "An error has occurred on the server." });
+    });
 };
 
 const getUser = (req, res) => {
   const { userId } = req.params;
 
   User.findById(userId)
-    .then((user) => {
-      if (!user) {
-        return res.status(404).send({ message: "User not found" });
+    .orFail()
+    .then((user) => res.send(user))
+    .catch((err) => {
+      console.error(err);
+      console.log(err.name);
+
+      if (err.name === "CastError") {
+        return res.status(BAD_REQUEST).send({ message: "Invalid user ID" });
       }
 
-      return res.send(user);
+      if (err.name === "DocumentNotFoundError") {
+        return res.status(NOT_FOUND).send({ message: "User not found" });
+      }
+
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: "An error has occurred on the server." });
     })
-    .catch(() => res.status(500).send({ message: "An error has occurred on the server" }));
 };
 
 const createUser = (req, res) => {
@@ -25,7 +47,20 @@ const createUser = (req, res) => {
 
   User.create({ name, avatar })
     .then((user) => res.status(201).send(user))
-    .catch(() => res.status(500).send({ message: "An error has occurred on the server" }));
+    .catch((err) => {
+      console.error(err);
+      console.log(err.name);
+
+      if (err.name === "ValidationError") {
+        return res
+          .status(BAD_REQUEST)
+          .send({ message: "Invalid data passed to create a user" });
+      }
+
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: "An error has occurred on the server." });
+    });
 };
 
 module.exports = { getUsers, getUser, createUser };

@@ -1,9 +1,21 @@
+/* eslint-disable no-console */
 const ClothingItem = require("../models/clothingItem");
+const {
+  BAD_REQUEST,
+  NOT_FOUND,
+  INTERNAL_SERVER_ERROR,
+} = require("../utils/errors");
 
 const getItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => res.send(items))
-    .catch(() => res.status(500).send({ message: "An error has occurred on the server" }));
+    .catch((err) => {
+      console.error(err);
+      console.log(err.name);
+      res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: "An error has occurred on the server." });
+    });
 };
 
 const createItem = (req, res) => {
@@ -17,21 +29,44 @@ const createItem = (req, res) => {
     owner,
   })
     .then((item) => res.status(201).send(item))
-    .catch(() => res.status(500).send({ message: "An error has occurred on the server" }));
+    .catch((err) => {
+      console.error(err);
+      console.log(err.name);
+
+      if (err.name === "ValidationError") {
+        return res
+          .status(BAD_REQUEST)
+          .send({ message: "Invalid data passed to create an item" });
+      }
+
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: "An error has occurred on the server." });
+    });
 };
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
 
   ClothingItem.findByIdAndDelete(itemId)
-    .then((item) => {
-      if (!item) {
-        return res.status(404).send({ message: "Requested resource not found" });
+    .orFail()
+    .then((item) => res.send(item))
+    .catch((err) => {
+      console.error(err);
+      console.log(err.name);
+
+      if (err.name === "CastError") {
+        return res.status(BAD_REQUEST).send({ message: "Invalid item ID" });
       }
 
-      return res.send(item);
+      if (err.name === "DocumentNotFoundError") {
+        return res.status(NOT_FOUND).send({ message: "Clothing item not found" });
+      }
+
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: "An error has occurred on the server." });
     })
-    .catch(() => res.status(500).send({ message: "An error has occurred on the server" }));
 };
 
 module.exports = { getItems, createItem, deleteItem };
