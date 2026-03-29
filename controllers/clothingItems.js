@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const ClothingItem = require("../models/clothingItem");
 const {
   BAD_REQUEST,
@@ -9,9 +8,7 @@ const {
 const getItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => res.send(items))
-    .catch((err) => {
-      console.error(err);
-      console.log(err.name);
+    .catch(() => {
       res
         .status(INTERNAL_SERVER_ERROR)
         .send({ message: "An error has occurred on the server." });
@@ -30,9 +27,6 @@ const createItem = (req, res) => {
   })
     .then((item) => res.status(201).send(item))
     .catch((err) => {
-      console.error(err);
-      console.log(err.name);
-
       if (err.name === "ValidationError") {
         return res
           .status(BAD_REQUEST)
@@ -52,9 +46,6 @@ const deleteItem = (req, res) => {
     .orFail()
     .then((item) => res.send(item))
     .catch((err) => {
-      console.error(err);
-      console.log(err.name);
-
       if (err.name === "CastError") {
         return res.status(BAD_REQUEST).send({ message: "Invalid item ID" });
       }
@@ -80,9 +71,6 @@ const likeItem = (req, res) => {
     .orFail()
     .then((item) => res.send(item))
     .catch((err) => {
-      console.error(err);
-      console.log(err.name);
-
       if (err.name === "CastError") {
         return res.status(BAD_REQUEST).send({ message: "Invalid item ID" });
       }
@@ -108,9 +96,6 @@ const dislikeItem = (req, res) => {
     .orFail()
     .then((item) => res.send(item))
     .catch((err) => {
-      console.error(err);
-      console.log(err.name);
-
       if (err.name === "CastError") {
         return res.status(BAD_REQUEST).send({ message: "Invalid item ID" });
       }

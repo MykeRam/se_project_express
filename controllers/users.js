@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const User = require("../models/user");
 const {
   BAD_REQUEST,
@@ -9,9 +8,7 @@ const {
 const getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send(users))
-    .catch((err) => {
-      console.error(err);
-      console.log(err.name);
+    .catch(() => {
       res
         .status(INTERNAL_SERVER_ERROR)
         .send({ message: "An error has occurred on the server." });
@@ -25,9 +22,6 @@ const getUser = (req, res) => {
     .orFail()
     .then((user) => res.send(user))
     .catch((err) => {
-      console.error(err);
-      console.log(err.name);
-
       if (err.name === "CastError") {
         return res.status(BAD_REQUEST).send({ message: "Invalid user ID" });
       }
@@ -39,7 +33,7 @@ const getUser = (req, res) => {
       return res
         .status(INTERNAL_SERVER_ERROR)
         .send({ message: "An error has occurred on the server." });
-    })
+    });
 };
 
 const createUser = (req, res) => {
@@ -48,9 +42,6 @@ const createUser = (req, res) => {
   User.create({ name, avatar })
     .then((user) => res.status(201).send(user))
     .catch((err) => {
-      console.error(err);
-      console.log(err.name);
-
       if (err.name === "ValidationError") {
         return res
           .status(BAD_REQUEST)
