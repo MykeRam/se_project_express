@@ -56,7 +56,3 @@ The server supports creating and retrieving users, creating and retrieving cloth
 ### Error Response
 
 ![API error response](./images/error-response.png)
-
-## Video Demo
-
-A video demo link can be added here to walk through the API routes and project structure.
