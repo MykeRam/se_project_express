@@ -1,7 +1,5 @@
 const ClothingItem = require("../models/clothingItem");
 
-const DEFAULT_USER_ID = "507f1f77bcf86cd799439011";
-
 const getItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => res.send(items))
@@ -10,12 +8,13 @@ const getItems = (req, res) => {
 
 const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
+  const owner = req.user._id;
 
   ClothingItem.create({
     name,
     weather,
     imageUrl,
-    owner: DEFAULT_USER_ID,
+    owner,
   })
     .then((item) => res.status(201).send(item))
     .catch(() => res.status(500).send({ message: "An error has occurred on the server" }));
