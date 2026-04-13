@@ -1,7 +1,10 @@
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const { JWT_SECRET } = require("../utils/config");
 const {
   BAD_REQUEST,
+  UNAUTHORIZED,
   CONFLICT,
   NOT_FOUND,
   INTERNAL_SERVER_ERROR,
@@ -78,4 +81,31 @@ const createUser = (req, res) => {
     });
 };
 
-module.exports = { getUsers, getUser, createUser };
+const login = (req, res) => {
+  const { email, password } = req.body;
+
+  User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+        expiresIn: "7d",
+      });
+
+      res.send({ token });
+    })
+    .catch((err) => {
+      if (err.name === "UnauthorizedError") {
+        return res.status(UNAUTHORIZED).send({ message: err.message });
+      }
+
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: "An error has occurred on the server." });
+    });
+};
+
+module.exports = {
+  getUsers,
+  getUser,
+  createUser,
+  login,
+};
