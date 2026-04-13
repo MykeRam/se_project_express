@@ -12,20 +12,10 @@ const {
 
 const SALT_ROUNDS = 10;
 
-const getUsers = (req, res) => {
-  User.find({})
-    .then((users) => res.send(users))
-    .catch(() => {
-      res
-        .status(INTERNAL_SERVER_ERROR)
-        .send({ message: "An error has occurred on the server." });
-    });
-};
+const getCurrentUser = (req, res) => {
+  const { _id } = req.user;
 
-const getUser = (req, res) => {
-  const { userId } = req.params;
-
-  User.findById(userId)
+  User.findById(_id)
     .orFail()
     .then((user) => res.send(user))
     .catch((err) => {
@@ -104,8 +94,7 @@ const login = (req, res) => {
 };
 
 module.exports = {
-  getUsers,
-  getUser,
+  getCurrentUser,
   createUser,
   login,
 };
