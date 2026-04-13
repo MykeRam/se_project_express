@@ -93,8 +93,41 @@ const login = (req, res) => {
     });
 };
 
+const updateProfile = (req, res) => {
+  const { _id } = req.user;
+  const { name, avatar } = req.body;
+
+  User.findByIdAndUpdate(
+    _id,
+    { name, avatar },
+    { new: true, runValidators: true }
+  )
+    .orFail()
+    .then((user) => res.send(user))
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        return res
+          .status(BAD_REQUEST)
+          .send({ message: "Invalid data passed to update profile" });
+      }
+
+      if (err.name === "CastError") {
+        return res.status(BAD_REQUEST).send({ message: "Invalid user ID" });
+      }
+
+      if (err.name === "DocumentNotFoundError") {
+        return res.status(NOT_FOUND).send({ message: "User not found" });
+      }
+
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: "An error has occurred on the server." });
+    });
+};
+
 module.exports = {
   getCurrentUser,
   createUser,
   login,
+  updateProfile,
 };
