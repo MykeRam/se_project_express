@@ -61,3 +61,8 @@ The API supports user signup, signin, reading the current user profile, updating
 ### Error Response
 
 ![API error response](./images/error-response.png)
+
+## Project Pitch Video
+
+Check out [this video](ADD_LINK_HERE), where I describe my
+project and some challenges I faced while building it.
