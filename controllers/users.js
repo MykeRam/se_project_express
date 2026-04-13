@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const validator = require("validator");
 const User = require("../models/user");
 const { JWT_SECRET } = require("../utils/config");
 const {
@@ -74,7 +75,18 @@ const createUser = (req, res) => {
 const login = (req, res) => {
   const { email, password } = req.body;
 
-  User.findUserByCredentials(email, password)
+  if (
+    typeof email !== "string"
+    || !validator.isEmail(email)
+    || typeof password !== "string"
+    || password.length === 0
+  ) {
+    return res
+      .status(BAD_REQUEST)
+      .send({ message: "Invalid data passed to login" });
+  }
+
+  return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
