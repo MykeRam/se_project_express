@@ -39,7 +39,20 @@ const createUser = (req, res) => {
     name, avatar, email, password,
   } = req.body;
 
-  bcrypt
+  if (
+    typeof name !== "string"
+    || typeof avatar !== "string"
+    || typeof email !== "string"
+    || !validator.isEmail(email)
+    || typeof password !== "string"
+    || password.trim() === ""
+  ) {
+    return res
+      .status(BAD_REQUEST)
+      .send({ message: "Invalid data passed to create a user" });
+  }
+
+  return bcrypt
     .hash(password, SALT_ROUNDS)
     .then((hash) => User.create({
       name,
