@@ -64,5 +64,5 @@ The API supports user signup, signin, reading the current user profile, updating
 
 ## Project Pitch Video
 
-Check out [this video](ADD_LINK_HERE), where I describe my
+Check out [this video](https://drive.google.com/file/d/1QcxKFAhSxuUYuud6l8GDlBmNVXDwIQwX/view?usp=sharing), where I describe my
 project and some challenges I faced while building it.
