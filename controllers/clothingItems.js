@@ -20,7 +20,20 @@ const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
   const owner = req.user._id;
 
-  ClothingItem.create({
+  if (
+    typeof name !== "string"
+    || name.trim() === ""
+    || typeof weather !== "string"
+    || weather.trim() === ""
+    || typeof imageUrl !== "string"
+    || imageUrl.trim() === ""
+  ) {
+    return res
+      .status(BAD_REQUEST)
+      .send({ message: "Invalid data passed to create an item" });
+  }
+
+  return ClothingItem.create({
     name,
     weather,
     imageUrl,

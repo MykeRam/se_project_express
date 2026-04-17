@@ -41,9 +41,11 @@ const createUser = (req, res) => {
 
   if (
     typeof name !== "string"
+    || name.trim() === ""
     || typeof avatar !== "string"
+    || avatar.trim() === ""
     || typeof email !== "string"
-    || !validator.isEmail(email)
+    || email.trim() === ""
     || typeof password !== "string"
     || password.trim() === ""
   ) {
@@ -92,7 +94,7 @@ const login = (req, res) => {
     typeof email !== "string"
     || !validator.isEmail(email)
     || typeof password !== "string"
-    || password.length === 0
+    || password.trim() === ""
   ) {
     return res
       .status(BAD_REQUEST)
@@ -122,7 +124,18 @@ const updateProfile = (req, res) => {
   const { _id } = req.user;
   const { name, avatar } = req.body;
 
-  User.findByIdAndUpdate(
+  if (
+    typeof name !== "string"
+    || name.trim() === ""
+    || typeof avatar !== "string"
+    || avatar.trim() === ""
+  ) {
+    return res
+      .status(BAD_REQUEST)
+      .send({ message: "Invalid data passed to update profile" });
+  }
+
+  return User.findByIdAndUpdate(
     _id,
     { name, avatar },
     { new: true, runValidators: true }
