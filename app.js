@@ -5,11 +5,11 @@ const { errors } = require("celebrate");
 const routes = require("./routes");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 const errorHandler = require("./middlewares/error-handler");
+const { PORT, MONGO_URL } = require("./utils/config");
 
 const app = express();
-const { PORT = 3001 } = process.env;
 
-mongoose.connect("mongodb://localhost:27017/wtwr_db");
+mongoose.connect(MONGO_URL);
 
 app.use(requestLogger);
 app.use(cors());
