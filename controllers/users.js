@@ -28,27 +28,31 @@ const getCurrentUser = (req, res, next) => {
 };
 
 const createUser = (req, res, next) => {
-  const {
-    name, avatar, email, password,
-  } = req.body;
+  const { name, avatar, email, password } = req.body;
 
   return bcrypt
     .hash(password, SALT_ROUNDS)
-    .then((hash) => User.create({
-      name,
-      avatar,
-      email,
-      password: hash,
-    }))
-    .then((user) => res.status(201).send({
-      _id: user._id,
-      name: user.name,
-      avatar: user.avatar,
-      email: user.email,
-    }))
+    .then((hash) =>
+      User.create({
+        name,
+        avatar,
+        email,
+        password: hash,
+      })
+    )
+    .then((user) =>
+      res.status(201).send({
+        _id: user._id,
+        name: user.name,
+        avatar: user.avatar,
+        email: user.email,
+      })
+    )
     .catch((err) => {
       if (err.name === "ValidationError") {
-        return next(new BadRequestError("Invalid data passed to create a user"));
+        return next(
+          new BadRequestError("Invalid data passed to create a user")
+        );
       }
 
       if (err.code === 11000) {
@@ -86,7 +90,9 @@ const updateProfile = (req, res, next) => {
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === "ValidationError" || err.name === "CastError") {
-        return next(new BadRequestError("Invalid data passed to update profile"));
+        return next(
+          new BadRequestError("Invalid data passed to update profile")
+        );
       }
 
       if (err.name === "DocumentNotFoundError") {

@@ -1,3 +1,6 @@
+const { isCelebrateError } = require("celebrate");
+
+const BAD_REQUEST = 400;
 const INTERNAL_SERVER_ERROR = 500;
 
 module.exports = (err, req, res, next) => {
@@ -5,7 +8,11 @@ module.exports = (err, req, res, next) => {
     return next(err);
   }
 
-  const { statusCode = INTERNAL_SERVER_ERROR, message } = err;
+  const celebrateError = isCelebrateError(err);
+  const statusCode = celebrateError
+    ? BAD_REQUEST
+    : err.statusCode || INTERNAL_SERVER_ERROR;
+  const message = celebrateError ? "Validation failed" : err.message;
 
   return res.status(statusCode).send({
     message:

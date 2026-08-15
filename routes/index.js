@@ -5,10 +5,7 @@ const auth = require("../middlewares/auth");
 const { getItems } = require("../controllers/clothingItems");
 const { login, createUser } = require("../controllers/users");
 const NotFoundError = require("../errors/not-found-error");
-const {
-  validateSignup,
-  validateSignin,
-} = require("../middlewares/validation");
+const { validateSignup, validateSignin } = require("../middlewares/validation");
 
 router.post("/signin", validateSignin, login);
 router.post("/signup", validateSignup, createUser);
