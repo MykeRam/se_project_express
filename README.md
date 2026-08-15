@@ -40,6 +40,17 @@ The API supports user signup, signin, reading the current user profile, updating
 - `npm run dev` starts the server on `localhost:3001` with hot reload
 - `npm run lint` runs ESLint
 
+## Deployment
+
+- Frontend: [https://www.mykeram.hollandweather.net](https://www.mykeram.hollandweather.net)
+- Frontend alias: [https://mykeram.hollandweather.net](https://mykeram.hollandweather.net)
+- API: [https://api.mykeram.hollandweather.net](https://api.mykeram.hollandweather.net)
+
+The application is deployed on Google Compute Engine. nginx serves the React
+frontend and proxies API requests to the PM2-managed Node.js process. MongoDB
+and the API listen only on the VM's private interface, and public traffic is
+encrypted with an automatically renewed Let's Encrypt certificate.
+
 ## Images / Screenshots
 
 ### Fetching Clothing Items
