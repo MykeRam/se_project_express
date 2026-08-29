@@ -74,7 +74,10 @@ encrypted with an automatically renewed Let's Encrypt certificate.
 
 ![API error response](./images/error-response.png)
 
-## Project Pitch Video
+## Project Pitch Videos
 
-Check out [this video](https://drive.google.com/file/d/1QcxKFAhSxuUYuud6l8GDlBmNVXDwIQwX/view?usp=sharing), where I describe my
-project and some challenges I faced while building it.
+These videos describe the project and some of the challenges I encountered
+while building it:
+
+- [Building a Secure REST API for Users](https://drive.google.com/file/d/1QcxKFAhSxuUYuud6l8GDlBmNVXDwIQwX/view?usp=sharing)
+- [WTWR Final Project Pitch](https://www.loom.com/share/458de65e05a8479da0ac3912f70b4e80)
