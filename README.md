@@ -80,7 +80,4 @@ These videos describe the project and some of the challenges I encountered
 while building it:
 
 - [Building a Secure REST API for Users](https://drive.google.com/file/d/1QcxKFAhSxuUYuud6l8GDlBmNVXDwIQwX/view?usp=sharing)
-- [WTWR Final Project Pitch](https://www.loom.com/share/458de65e05a8479da0ac3912f70b4e80)
-
-Because Loom's free plan does not support video downloads, the final project
-pitch is linked directly above.
+- [WTWR Final Project Pitch](https://drive.google.com/file/d/12_CTMyFk41qJK0B0Z-G4MRNC15o1Yt_m/view?usp=sharing)
